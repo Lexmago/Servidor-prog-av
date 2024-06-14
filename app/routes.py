@@ -1,6 +1,8 @@
 from flask_restful import Resource
 # Este modulo irve para aceptar info de un usuario
 from flask import request
+#Importamos los metodos de nuestra API
+from .methods import *
 
 lista_objetos_almacen = [
 {
@@ -31,23 +33,8 @@ class Almacen(Resource):
         parametro_id = request.args.get('id')
         parametro_nombre = request.args.get('nombre')
 
-        # Comparamos si el parametro esta vacío
-        if parametro_id != None:
-            for objeto in lista_objetos_almacen:
-                if objeto.get('id') == int(parametro_id):
-                    return { 'objeto': objeto, 'status': 200}
-                
-            return {'Mensaje': 'Objeto no encontrado', 'status': 404}
-        
-        if parametro_nombre != None:
-            for objeto in lista_objetos_almacen:
-                if objeto.get('nombre') == parametro_nombre.capitalize():
-                    return { 'objeto': objeto, 'status': 200}
-                
-            return {'Mensaje': 'Objeto no encontrado', 'status': 404}
-        
-        return {'Objetos': lista_objetos_almacen, 'status': 200}
-    # Ponemos un nuevo objeto en el almacen
+        return buscar_elemento_id_nombre(lista_objetos_almacen, parametro_id, parametro_nombre)
+
     def post(self):
         # Se crea una nueva variable para guardar la información que posteó el usuario
         data = request.get_json()
