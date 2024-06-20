@@ -8,11 +8,17 @@ from .extensions import db
 # Creamos una función para montar el servidor
 def crear_app():
     app = Flask(__name__)
-    db.init_app(app) #Aqui la DB se va a inicializar en nuestra aplicación
     app.config.from_object(Config) #Nuestra app se va a configurar desde un objeto
-    api = Api(app)
+    db.init_app(app) #Conectamos la app con la base de datos
 
-    routes = APIRoutes()
-    routes.init_routes(api)
+    with app.app_context():
+        #Inicializamos la DB
+        db.create_all()
+        #La variable api manejará las peticiones
+        api = Api(app)
+
+        routes = APIRoutes() #Esta variable manejará las rutas
+        routes.init_routes(api) #Inicializamos las rutas en nuestra API
+
     # Regresamos ese servidor montado
     return app
