@@ -24,7 +24,20 @@ class Almacen(Resource):
 
         return crear_producto(data['nombre'], data['cantidad'])
     
+    
+class User_register(Resource):
+    def post(self):
+        data = request.form
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+
+        print(username, email, password)
+
+        return 'Hola', 200
+
 class APIRoutes():
     def init_routes(self, api):
         api.add_resource(HelloWorld, '/')
         api.add_resource(Almacen, '/objetos_almacen')
+        api.add_resource(User_register, '/usuarios/registro')
