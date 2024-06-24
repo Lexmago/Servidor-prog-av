@@ -32,12 +32,26 @@ class User_register(Resource):
         email = data.get('email')
         password = data.get('password')
 
-        print(username, email, password)
+        #print(username, email, password)
+        respuesta, status = user_register(username, email, password)
 
-        return 'Hola', 200
+        return respuesta, status
+    
+class User_login(Resource):
+    def post(self):
+        data = request.form
+        email = data.get('email')
+        password = data.get('password')
 
+        respuesta, status = login(email, password)
+
+        return respuesta, status
+
+
+#Esta clase siempre debe ir al final de todo el codigo. Todo recurso despues de esta clase, ya no se ejecutará.
 class APIRoutes():
     def init_routes(self, api):
         api.add_resource(HelloWorld, '/')
         api.add_resource(Almacen, '/objetos_almacen')
         api.add_resource(User_register, '/usuarios/registro')
+        api.add_resource(User_login, '/usuarios/login')

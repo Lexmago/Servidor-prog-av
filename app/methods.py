@@ -1,5 +1,6 @@
 from app.extensions import db
 from .models.producto import Producto
+from .models.usuarios import User
 
 def buscar_elemento_id_nombre(parametro_id, parametro_nombre):
     if parametro_id != None:
@@ -40,3 +41,30 @@ def crear_producto(nombre, cantidad):
     }
     
     return json_retornado
+
+def user_register(username, email, password):
+    #Busca un usuario por su email
+    user = User.get_user_by_email(email=email)
+
+    #Si el usuario ya estaba registrado, regresamos un error
+    if user is not None:
+        return {'ERROR': 'Este correo ya esta registrado :( '}, 403
+    
+    #Se crea un objeto de tipo user con el username y el correo
+    nuevo_user = User(username=username, email=email)
+    nuevo_user.set_password(password=password) #A ese objeto se le setea una contraseña cifrada
+    nuevo_user.save()
+
+    return {'Nuevo usuario': {
+        'username': username,
+        'email': email 
+        }
+    }, 200 #Le damos una respuesta satisfactoria al usuario.
+
+def login(email, password):
+    user = User.get_user_by_email(email=email)
+
+    if user and (user.check_password(password=password)):
+        return {'Mensaje': 'Loggeado'}, 200
+    
+    return {'Error': 'Correo o contraseña no existen...'}, 400
