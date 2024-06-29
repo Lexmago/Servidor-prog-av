@@ -1,6 +1,8 @@
 from app.extensions import db
 from .models.producto import Producto
 from .models.usuarios import User
+from flask_jwt_extended import create_access_token
+from datetime import timedelta
 
 def buscar_elemento_id_nombre(parametro_id, parametro_nombre):
     if parametro_id != None:
@@ -63,8 +65,13 @@ def user_register(username, email, password):
 
 def login(email, password):
     user = User.get_user_by_email(email=email)
+    token_caducidad = timedelta(minutes=2)
 
     if user and (user.check_password(password=password)):
-        return {'Mensaje': 'Loggeado'}, 200
+        # Creamos un token de acceso
+        token_acceso = create_access_token(identity=user.username, expires_delta=token_caducidad)
+        return {'Mensaje': 'Loggeado',
+                'Token': token_acceso
+               }, 200
     
     return {'Error': 'Correo o contraseña no existen...'}, 400

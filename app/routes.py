@@ -3,9 +3,11 @@ from flask_restful import Resource
 from flask import request
 #Importamos los metodos de nuestra API
 from .methods import *
+from flask_jwt_extended import jwt_required
 
 
 class HelloWorld(Resource):
+    @jwt_required() # Decorador que protege la ruta raíz de mi aplicación
     def get(self):
         return {'message': 'Hola mundo desde la API', 'status': 200}
     
