@@ -7,10 +7,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class HelloWorld(Resource):
-    @jwt_required() # Decorador que protege la ruta raíz de mi aplicación
+    #@jwt_required() # Decorador que protege la ruta raíz de mi aplicación
     def get(self):
-        identidad = get_jwt_identity()
-        return {'message': f'Hola {identidad}, como estas?', 'status': 200}
+        #identidad = get_jwt_identity()
+        return {'message': f'Hola Bienvenido a la API!', 'status': 200}
     
 class Almacen(Resource):
     # Obtenemos la informacion del almacen
