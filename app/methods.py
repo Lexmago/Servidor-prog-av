@@ -65,7 +65,7 @@ def user_register(username, email, password):
 
 def login(email, password):
     user = User.get_user_by_email(email=email)
-    token_caducidad = timedelta(minutes=2)
+    token_caducidad = timedelta(minutes=60)
 
     if user and (user.check_password(password=password)):
         # Creamos un token de acceso

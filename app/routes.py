@@ -3,16 +3,18 @@ from flask_restful import Resource
 from flask import request
 #Importamos los metodos de nuestra API
 from .methods import *
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class HelloWorld(Resource):
     @jwt_required() # Decorador que protege la ruta raíz de mi aplicación
     def get(self):
-        return {'message': 'Hola mundo desde la API', 'status': 200}
+        identidad = get_jwt_identity()
+        return {'message': f'Hola {identidad}, como estas?', 'status': 200}
     
 class Almacen(Resource):
     # Obtenemos la informacion del almacen
+    @jwt_required()
     def get(self):
         # Esta variable va a interceptar la información de nuestra Query
         parametro_id = request.args.get('id')
@@ -20,6 +22,7 @@ class Almacen(Resource):
 
         return buscar_elemento_id_nombre(parametro_id, parametro_nombre)
 
+    @jwt_required()
     def post(self):
         # Se crea una nueva variable para guardar la información que posteó el usuario
         data = request.get_json()
